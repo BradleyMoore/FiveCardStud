@@ -1,4 +1,4 @@
 FiveCardStud
 ============
 
-simple five card stud game
+simple oop five card stud game
