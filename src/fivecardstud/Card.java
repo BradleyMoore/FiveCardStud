@@ -6,7 +6,7 @@ public class Card {
         char cardSuit = suit;
         int worth;
         
-        if (Integer.parseInt(number) >= 2 || Integer.parseInt(number) <= 10){
+        if (Integer.parseInt(number) >= 2 && Integer.parseInt(number) <= 10){
             worth = Integer.parseInt(number);
         } else {
             switch(cardValue){
