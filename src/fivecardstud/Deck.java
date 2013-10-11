@@ -1,7 +1,9 @@
 package fivecardstud;
+import java.util.List;
 
 public class Deck {
     int deckSize;
+    List usedCardIndex;
     Card[] deck;
     String[] values = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack",
         "Queen", "King", "Ace"};
@@ -35,8 +37,21 @@ public class Deck {
         return deck;
     }
     
-    public Card[] deal(int toDeal){
-        int rand;
-        
+    public Card[] deal(int toDeal, int players){
+        Card[] hand;
+        hand = new Card[toDeal];
+        int i = 0;
+        int j = 0;
+        while (j<toDeal){
+            if(usedCardIndex.contains(i)){
+                i++;
+            } else {
+                usedCardIndex.add(i);
+                hand[j] = deck[i];
+                i+=players;
+                j++;
+            }
+        }
+        return hand;
     }
 }
