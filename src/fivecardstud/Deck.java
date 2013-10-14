@@ -40,11 +40,14 @@ public class Deck {
     public Card[] deal(int toDeal, int players){
         Card[] hand;
         hand = new Card[toDeal];
-        int i = 0;
-        int j = 0;
+
+        // check to see if card is already dealt
+        int i = 0, j = 0;
         while (j<toDeal){
+            // if card already used...iterate
             if(usedCardIndex.contains(i)){
                 i++;
+            // if card is unused, use it, add to used list, iterate all
             } else {
                 usedCardIndex.add(i);
                 hand[j] = deck[i];
