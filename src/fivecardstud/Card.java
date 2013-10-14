@@ -1,17 +1,28 @@
 package fivecardstud;
-import java.util.HashMap;
         
 public class Card {
-    Card (String value, String suit){
+    String rank, suit;
+    int value;
+    
+    public Card (String rank, String suit){
+        this.rank = rank;
+        this.suit = suit;
         
-        HashMap worth = new HashMap<String, Integer>();
-        for (int i=2; i<=10; i++){
-            worth.put(new Integer(i).toString(), i);
+        switch (rank){
+            case "Jack":
+                this.value = 11;
+                break;
+            case "Queen":
+                this.value = 12;
+                break;
+            case "King":
+                this.value = 13;
+                break;
+            case "Ace":
+                this.value = 14;
+                break;
+            default:
+                this.value = Integer.parseInt(rank);
         }
-        worth.put("Jack", 10);
-        worth.put("Queen", 11);
-        worth.put("King", 12);
-        worth.put("Ace", 13);
-        
     }
 }
