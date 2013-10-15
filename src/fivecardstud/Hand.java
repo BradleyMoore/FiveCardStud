@@ -8,7 +8,6 @@ public class Hand {
     public Hand(Card[] dealt, int player){
         this.cards = deal(Status.handSize, Status.numPlayers);
         this.player = player;
-        this.rank = rank();
     }
     
     public static Card[] deal(int toDeal, int players){
@@ -32,7 +31,19 @@ public class Hand {
         return hand;
     }
     
-    public int rank(){
+    public int evaluate(){
+        String[] suits;
+        int[] values;
+        
+        suits = new String[Status.handSize];
+        values = new int[Status.handSize];
+        
+        for (int i=0; i<Status.handSize; i++){
+            suits[i] = this.cards[i].suit;
+            values[i] = this.cards[i].value;
+        }
+
+        
         
         return this.rank;
     }
