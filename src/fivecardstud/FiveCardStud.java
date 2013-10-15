@@ -10,7 +10,7 @@ public class FiveCardStud {
         
         status = new Status();
 
-        Status.showPlayers();
+        for (Player player: Status.players) player.show();
         deck.show();
     }
 }
