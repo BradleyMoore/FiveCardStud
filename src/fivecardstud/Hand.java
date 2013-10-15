@@ -3,10 +3,12 @@ package fivecardstud;
 public class Hand {
     Card[] cards;
     int player;
+    int rank;
     
     public Hand(Card[] dealt, int player){
         this.cards = deal(Status.handSize, Status.numPlayers);
         this.player = player;
+        this.rank = rank();
     }
     
     public static Card[] deal(int toDeal, int players){
@@ -28,5 +30,10 @@ public class Hand {
             }
         }
         return hand;
+    }
+    
+    public int rank(){
+        
+        return this.rank;
     }
 }
