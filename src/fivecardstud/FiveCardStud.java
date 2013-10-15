@@ -9,6 +9,7 @@ public class FiveCardStud {
         deck.shuffle();
         
         status = new Status();
+        Player.create();
 
         for (Player player: Status.players) player.show();
         deck.show();
