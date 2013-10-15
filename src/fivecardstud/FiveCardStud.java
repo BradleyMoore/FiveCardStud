@@ -10,9 +10,7 @@ public class FiveCardStud {
         
         status = new Status();
 
-        for (Card card: deck.deck) {
-            System.out.println(card.value + " " + card.rank + " " + card.suit);
-        }
         Status.showPlayers();
+        deck.show();
     }
 }
