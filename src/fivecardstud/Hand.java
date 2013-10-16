@@ -2,13 +2,24 @@ package fivecardstud;
 
 public class Hand {
     Card[] cards;
+    Card highCard;
+    String handName;
+    String[] suits;
+    String suitTemp;
     int player;
     int rank;
-    Card highCard;
+    int[] values;
+
+
+
+
+
     
     public Hand(Card[] dealt, int player){
         this.cards = deal(Status.handSize, Status.numPlayers);
         this.player = player;
+        this.suits = new String[Status.handSize];
+        this.values = new int[Status.handSize];
     }
     
     public static Card[] deal(int toDeal, int players){
@@ -32,26 +43,32 @@ public class Hand {
         return hand;
     }
     
+    private boolean getHighCard(){
+        for (Card card: this.cards) {
+            if (card.value > this.highCard.value) this.highCard = card;
+        }
+        return false;
+    }
+ 
+    private boolean checkFlush(){
+        suitTemp = suits[0];
+        for (String suit: suits) {
+            if (suitTemp.equals(suit)) {
+                suitTemp = suit;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+    
     // rank hands from 0 being the worst and up to the best
     public int evaluate(){
-        this.highCard = this.cards[0];
-        String[] suits;
-        int[] values;
-        
-        suits = new String[Status.handSize];
-        values = new int[Status.handSize];
-        
         // create array of suits and array of values for comparrisons in ranking
         for (int i=0; i<Status.handSize; i++){
             suits[i] = this.cards[i].suit;
             values[i] = this.cards[i].value;
         }
-        
-        // find high card in cards
-        for (Card card: this.cards) {
-            if (card.value > this.highCard.value) this.highCard = card;
-        }
-        
         return this.rank;
     }
 }
