@@ -4,6 +4,7 @@ public class Hand {
     Card[] cards;
     int player;
     int rank;
+    Card highCard;
     
     public Hand(Card[] dealt, int player){
         this.cards = deal(Status.handSize, Status.numPlayers);
@@ -31,19 +32,25 @@ public class Hand {
         return hand;
     }
     
+    // rank hands from 0 being the worst and up to the best
     public int evaluate(){
+        this.highCard = this.cards[0];
         String[] suits;
         int[] values;
         
         suits = new String[Status.handSize];
         values = new int[Status.handSize];
         
+        // create array of suits and array of values for comparrisons in ranking
         for (int i=0; i<Status.handSize; i++){
             suits[i] = this.cards[i].suit;
             values[i] = this.cards[i].value;
         }
-
         
+        // find high card in cards
+        for (Card card: this.cards) {
+            if (card.value > this.highCard.value) this.highCard = card;
+        }
         
         return this.rank;
     }
