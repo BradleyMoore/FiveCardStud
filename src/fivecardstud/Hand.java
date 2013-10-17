@@ -8,6 +8,7 @@ public class Hand {
     String suitTemp;
     int player;
     int rank;
+    int valueTemp;
     int[] values;
 
 
@@ -55,6 +56,18 @@ public class Hand {
         for (String suit: suits) {
             if (suitTemp.equals(suit)) {
                 suitTemp = suit;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private boolean checkStrait(){
+        valueTemp = values[0];
+        for (int value: values) {
+            if (valueTemp == value) {
+                valueTemp = value;
             } else {
                 return false;
             }
