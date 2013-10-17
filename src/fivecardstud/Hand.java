@@ -1,4 +1,5 @@
 package fivecardstud;
+import java.util.Arrays;
 
 public class Hand {
     Card[] cards;
@@ -10,17 +11,19 @@ public class Hand {
     int rank;
     int valueTemp;
     int[] values;
-
-
-
-
-
     
     public Hand(Card[] dealt, int player){
         this.cards = deal(Status.handSize, Status.numPlayers);
         this.player = player;
         this.suits = new String[Status.handSize];
         this.values = new int[Status.handSize];
+        
+        // create array of suits and array of values for comparrisons in ranking
+        for (int i=0; i<Status.handSize; i++){
+            this.suits[i] = this.cards[i].suit;
+            this.values[i] = this.cards[i].value;
+        }
+        Arrays.sort(this.suits);
     }
     
     public static Card[] deal(int toDeal, int players){
@@ -52,8 +55,8 @@ public class Hand {
     }
  
     private boolean checkFlush(){
-        suitTemp = suits[0];
-        for (String suit: suits) {
+        suitTemp = this.suits[0];
+        for (String suit: this.suits) {
             if (suitTemp.equals(suit)) {
                 suitTemp = suit;
             } else {
@@ -64,8 +67,8 @@ public class Hand {
     }
     
     private boolean checkStrait(){
-        valueTemp = values[0];
-        for (int value: values) {
+        valueTemp = this.values[0];
+        for (int value: this.values) {
             if (valueTemp == value) {
                 valueTemp = value;
             } else {
@@ -77,11 +80,7 @@ public class Hand {
     
     // rank hands from 0 being the worst and up to the best
     public int evaluate(){
-        // create array of suits and array of values for comparrisons in ranking
-        for (int i=0; i<Status.handSize; i++){
-            suits[i] = this.cards[i].suit;
-            values[i] = this.cards[i].value;
-        }
+
         return this.rank;
     }
 }
