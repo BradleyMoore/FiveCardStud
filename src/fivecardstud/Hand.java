@@ -1,74 +1,95 @@
 package fivecardstud;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Hand {
-    Card[] cards;
-    Card highCard;
     String handName;
-    String[] suits;
-    String suitTemp;
+    List<Card> cards;
+    List<Card> cardsTemp;
+    List<String> suits;
+    List<Integer> values;
+    boolean skipIter;
     int player;
     int rank;
     int valueTemp;
-    int[] values;
     
-    public Hand(Card[] dealt, int player){
-        this.cards = deal(Status.handSize, Status.numPlayers);
+    public Hand(int player) {
+        cards = deal(Status.handSize, Status.numPlayers);
+        cardsTemp = new ArrayList<>();
         this.player = player;
-        this.suits = new String[Status.handSize];
-        this.values = new int[Status.handSize];
         
         // create array of suits and array of values for comparrisons in ranking
-        for (int i=0; i<Status.handSize; i++){
-            this.suits[i] = this.cards[i].suit;
-            this.values[i] = this.cards[i].value;
+        for (Card card: cards) {
+            suits.add(card.suit);
+            values.add(card.value);
         }
-        Arrays.sort(this.suits);
+        Collections.sort(suits);
+        Collections.sort(values);
+        
+        // sort cards by value
+
     }
     
-    public static Card[] deal(int toDeal, int players){
-        Card[] hand;
-        hand = new Card[toDeal];
+    static public List deal(int toDeal, int players){
+        List<Card> hand;
+        hand = new ArrayList();
 
         // check to see if card is already dealt
-        int i = 0, j = 0;
-        while (j<toDeal){
-            // if card already used...iterate
-            if(Deck.usedCardIndex.contains(i)){
-                i++;
+        for (Card card: FiveCardStud.deck.deck){
+             // if card already used...iterate
+            if(FiveCardStud.deck.usedCardIndex.contains(card)){
+                continue;
             // if card is unused, use it, add to used list, iterate all
             } else {
-                Deck.usedCardIndex.add(i);
-                hand[j] = FiveCardStud.deck.deck[i];
-                i+=players;
-                j++;
+                FiveCardStud.deck.usedCardIndex.add(card);
+                hand.add(card);
             }
         }
         return hand;
     }
     
-    private boolean getHighCard(){
-        for (Card card: this.cards) {
-            if (card.value > this.highCard.value) this.highCard = card;
+    Card getHighCard(){
+        Card highCard;
+        highCard = cards.get(0);
+        for (Card card: cards) {
+            if (card.value > highCard.value) highCard = card;
         }
-        return false;
+        return highCard;
     }
  
-    private boolean checkFlush(){
-        suitTemp = this.suits[0];
-        for (String suit: this.suits) {
+    List checkFlush(){
+        String suitTemp;
+        suitTemp = suits.get(0);
+        cardsTemp.add(cards.get(0));
+        skipIter = true;
+        int i = 0;
+        for (String suit: suits) {
+            // skip first iteration
+            if (skipIter == true) {
+                skipIter = false;
+                continue;
+            }
+            i++;
             if (suitTemp.equals(suit)) {
                 suitTemp = suit;
-            } else {
-                return false;
+                cardsTemp.add(cards.get(i));
             }
         }
-        return true;
+        return cardsTemp;
     }
     
-    private boolean checkStrait(){
-        valueTemp = this.values[0];
-        for (int value: this.values) {
+    boolean checkStrait(){
+        skipIter = true;
+        valueTemp = values.get(0);
+        for (int value: values) {
+            // skip first iteration
+            if (skipIter == true) {
+                skipIter = false;
+                continue;
+            }
+            valueTemp+=1;
             if (valueTemp == value) {
                 valueTemp = value;
             } else {
@@ -77,6 +98,8 @@ public class Hand {
         }
         return true;
     }
+    
+    
     
     // rank hands from 0 being the worst and up to the best
     public int evaluate(){
