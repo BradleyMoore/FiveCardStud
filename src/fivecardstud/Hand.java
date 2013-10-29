@@ -1,10 +1,10 @@
 package fivecardstud;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Hand {
+    Card cardTemp;
     String handName;
     List<Card> cards;
     List<Card> cardsTemp;
@@ -15,30 +15,19 @@ public class Hand {
     int rank;
     int valueTemp;
     
-    public Hand(int player) {
-        cards = deal(Status.handSize, Status.numPlayers);
+    public Hand() {
+        cards = new ArrayList<>();
         cardsTemp = new ArrayList<>();
-        this.player = player;
-        
-        // create array of suits and array of values for comparrisons in ranking
-        for (Card card: cards) {
-            suits.add(card.suit);
-            values.add(card.value);
-        }
-        Collections.sort(suits);
-        Collections.sort(values);
-        
-        // sort cards by value
-
+        suits = new ArrayList<>();
+        values = new ArrayList<>();
     }
     
-    static public List deal(int toDeal, int players){
+    public void deal(){
         List<Card> hand;
         hand = new ArrayList();
 
-        // check to see if card is already dealt
-        for (Card card: FiveCardStud.deck.deck){
-             // if card already used...iterate
+        for (Card card: FiveCardStud.deck.cards){
+             // check to see if card is already dealt
             if(FiveCardStud.deck.usedCardIndex.contains(card)){
                 continue;
             // if card is unused, use it, add to used list, iterate all
@@ -46,8 +35,39 @@ public class Hand {
                 FiveCardStud.deck.usedCardIndex.add(card);
                 hand.add(card);
             }
+            if (hand.size() >= Status.handSize) break;
         }
-        return hand;
+        sortCards(hand);
+    }
+    
+    void sortCards(List<Card> hand){
+        List<Card> tempHand;
+        List<Card> usedCards;
+        tempHand = new ArrayList();
+        usedCards = new ArrayList();
+        for (Card card: hand) {
+            tempHand.add(card);
+        }
+
+        // create array of suits and array of values for comparrisons in ranking
+        for (Card card: hand) {
+            suits.add(card.suit);
+            values.add(card.value);
+        }
+        Collections.sort(suits);
+        Collections.sort(values);
+
+        // sort cards by value
+        //////// NEED TO REDO ////////
+        
+        cards = cardsTemp;
+        for (Card card: cards) System.out.println(card.value);
+    }
+    
+    void show(){
+        for (Card card: cards) {
+            System.out.println(card.rank + " " + card.suit);
+        }
     }
     
     Card getHighCard(){
