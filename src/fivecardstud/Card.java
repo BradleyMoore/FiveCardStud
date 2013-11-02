@@ -1,5 +1,20 @@
 package fivecardstud;
-        
+import java.util.Comparator;
+
+class SuitComparator implements Comparator<Card> {
+    @Override
+    public int compare(Card a, Card b) {
+        return a.suit.compareToIgnoreCase(b.suit);
+    }
+}
+
+class ValueComparator implements Comparator<Card> {
+    @Override
+    public int compare(Card a, Card b) {
+        return a.value < b.value ? -1 : a.value == b.value ? 0 : 1;
+    }
+}
+
 public class Card {
     String rank, suit;
     int value;
@@ -24,5 +39,10 @@ public class Card {
             default:
                 this.value = Integer.parseInt(rank);
         }
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("{suit=%s, value=%d}", suit, value);
     }
 }
