@@ -21,8 +21,9 @@ public class Player {
     }
     
     public void show(){
+        System.out.println(this.name);
         for (Card card: cards){
-                System.out.println(this.name + " -- " + card.rank + " of " + card.suit);
+                System.out.println(card.rank + " of " + card.suit);
         }
         System.out.println("");
     }
