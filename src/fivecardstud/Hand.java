@@ -7,9 +7,9 @@ public class Hand {
     Card cardTemp;
     String handName;
     List<Card> cards;
+    List<String> cardsBySuit;
+    List<Integer> cardsByValue;
     List<Card> cardsTemp;
-    List<String> suits;
-    List<Integer> values;
     boolean skipIter;
     int player;
     int rank;
@@ -18,8 +18,8 @@ public class Hand {
     public Hand() {
         cards = new ArrayList<>();
         cardsTemp = new ArrayList<>();
-        suits = new ArrayList<>();
-        values = new ArrayList<>();
+        cardsBySuit = new ArrayList<>();
+        cardsByValue = new ArrayList<>();
     }
     
     public void deal(){
@@ -37,31 +37,8 @@ public class Hand {
             }
             if (hand.size() >= Status.handSize) break;
         }
-        sortCards(hand);
-    }
-    
-    void sortCards(List<Card> hand){
-        List<Card> tempHand;
-        List<Card> usedCards;
-        tempHand = new ArrayList();
-        usedCards = new ArrayList();
-        for (Card card: hand) {
-            tempHand.add(card);
-        }
-
-        // create array of suits and array of values for comparrisons in ranking
-        for (Card card: hand) {
-            suits.add(card.suit);
-            values.add(card.value);
-        }
-        Collections.sort(suits);
-        Collections.sort(values);
-
-        // sort cards by value
-        //////// NEED TO REDO ////////
-        
-        cards = cardsTemp;
-        for (Card card: cards) System.out.println(card.value);
+        Collections.sort(hand, new ValueComparator());
+        for (Card card: hand) System.out.println(card.rank + " of " + card.suit);
     }
     
     void show(){
@@ -81,11 +58,11 @@ public class Hand {
  
     List checkFlush(){
         String suitTemp;
-        suitTemp = suits.get(0);
+        suitTemp = cardsBySuit.get(0);
         cardsTemp.add(cards.get(0));
         skipIter = true;
         int i = 0;
-        for (String suit: suits) {
+        for (String suit: cardsBySuit) {
             // skip first iteration
             if (skipIter == true) {
                 skipIter = false;
@@ -102,8 +79,8 @@ public class Hand {
     
     boolean checkStrait(){
         skipIter = true;
-        valueTemp = values.get(0);
-        for (int value: values) {
+        valueTemp = cardsByValue.get(0);
+        for (int value: cardsByValue) {
             // skip first iteration
             if (skipIter == true) {
                 skipIter = false;
