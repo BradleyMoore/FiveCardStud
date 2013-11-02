@@ -8,12 +8,8 @@ public class Status {
     List<Player> players;
     
     public Status() {
-        handSize = 10;
+        handSize = 5;
         numPlayers = 2;
         players = new ArrayList<>();
-        
-        for (int i=0; i<numPlayers; i++) {
-            players.add(new Player(i+1, "Player " + Integer.toString(i+1)));
-        }
     }
 }
