@@ -22,7 +22,7 @@ public class Hand {
         cardsByValue = new ArrayList<>();
     }
     
-    public void deal(){
+    public List<Card> deal(){
         List<Card> hand;
         hand = new ArrayList();
 
@@ -38,7 +38,7 @@ public class Hand {
             if (hand.size() >= Status.handSize) break;
         }
         Collections.sort(hand, new ValueComparator());
-        for (Card card: hand) System.out.println(card.rank + " of " + card.suit);
+        return hand;
     }
     
     void show(){

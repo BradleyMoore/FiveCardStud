@@ -1,21 +1,19 @@
 package fivecardstud;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Status {
-    int numPlayers;
-    Player[] players;
+    static int handSize;
+    static int numPlayers;
+    List<Player> players;
     
     public Status() {
-        this.numPlayers = 2;
-        this.players = new Player[numPlayers];
+        handSize = 10;
+        numPlayers = 2;
+        players = new ArrayList<>();
         
         for (int i=0; i<numPlayers; i++) {
-            this.players[i] = new Player(i+1, "Player " + Integer.toString(i+1));
-        }
-    }
-    
-    public void showPlayers() {
-        for (int i=0; i<numPlayers; i++){
-            System.out.println(this.players[i].name + " " + this.players[i].num);
+            players.add(new Player(i+1, "Player " + Integer.toString(i+1)));
         }
     }
 }

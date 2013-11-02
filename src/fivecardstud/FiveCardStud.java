@@ -11,8 +11,8 @@ public class FiveCardStud {
         status = new Status();
         Player.createAll();
 
-        // test print section
-        for (Player player: Status.players) player.show();
-        deck.show();
+        for (Player player: status.players) player.deal();
+        
+        for (Player player: status.players) player.show();
     }
 }
