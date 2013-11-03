@@ -1,5 +1,6 @@
 package fivecardstud;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Hierarchy {
@@ -7,7 +8,7 @@ public class Hierarchy {
     public Hierarchy() {
 }
 
-    Card getHighCard(List<Card> cards){
+    static Card getHighCard(List<Card> cards){
         Card highCard;
         highCard = cards.get(0);
         for (Card card: cards) {
@@ -16,34 +17,38 @@ public class Hierarchy {
         return highCard;
     }
  
-    boolean checkFlush(List<Card> cards){
+    static List<Card> checkFlush(List<Card> cards){
         Card temp;
         temp = cards.get(0);
+        
         for (Card card: cards) {
             if (!card.suit.equals(temp.suit)) {
-                return false;
+                return null;
             }
         }
-        return true;
+        return cards;
     }
     
-    boolean checkStrait(List<Card> cards){
+    static List<Card> checkStrait(List<Card> cards){
+        boolean skipIter;
+        Card temp;
         skipIter = true;
-        valueTemp = cardsByValue.get(0);
-        for (int value: cardsByValue) {
+        temp = cards.get(0);
+        
+        Collections.sort(cards, new ValueComparator());
+        
+        for (Card card: cards) {
             // skip first iteration
             if (skipIter == true) {
                 skipIter = false;
                 continue;
             }
-            valueTemp+=1;
-            if (valueTemp == value) {
-                valueTemp = value;
-            } else {
-                return false;
+
+            if (card.value - temp.value != 1) {
+                return null;
             }
         }
-        return true;
+        return cards;
     }
     
     
