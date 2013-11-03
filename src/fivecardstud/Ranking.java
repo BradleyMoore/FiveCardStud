@@ -50,21 +50,28 @@ public class Ranking {
     }
 
     static List<List<Card>> checkPairs(List<Card> cards) {
+        Collections.sort(cards, new SuitComparator());
         Collections.sort(cards, new ValueComparator());
-        
-        boolean skipIter;
         boolean foundPair;
+        boolean nextList;
+        boolean skipIter;
+        boolean thisList;
         Card temp;
         List<Card> matches1;
         List<Card> matches2;
         List<List<Card>> pairs;
         
         foundPair = false;
+        nextList = false;
         skipIter = true;
+        thisList = false;
         temp = cards.get(0);
         matches1 = new ArrayList<>();
         matches2 = new ArrayList<>();
         pairs = new ArrayList<>();
+        
+        matches1.clear();
+        matches2.clear();
         
         for (Card card: cards) {
             // skip first iteration
@@ -73,28 +80,31 @@ public class Ranking {
                 continue;
             }
             
+            if (temp.value != card.value) {
+                foundPair = false;
+            // if matches1 HAS been used keep adding pairs to matches 2
+            } else if (foundPair == false && nextList == true) {
+                if (thisList == false) matches2.add(temp);
+                matches2.add(card);
+                thisList = true;
             // if matches2 HAS NOT been used keep adding pairs to matches1
-            if (matches2.isEmpty() && temp.value == card.value) {
-                if (temp == cards.get(0)) matches1.add(temp);
+            } else if (matches2.isEmpty()) {
+                if (foundPair == false) matches1.add(temp);
                 matches1.add(card);
                 foundPair = true;
-            // if matches1 HAS been used keep adding pairs to matches 2
-            } else if (foundPair == false && !matches1.isEmpty() && temp.value == card.value) {
-                matches2.add(card);
-            } else {
-                foundPair = false;
+                nextList = true;
             }
             temp = card;
         }
         
         // add non-empty lists to returned list of lists
-        if (!matches1.isEmpty()) {
+        if (matches1.size() > 0) {
             pairs.add(matches1);
         } else {
             pairs.add(null);
         }
         
-        if (!matches2.isEmpty()) {
+        if (matches2.size() > 0) {
             pairs.add(matches2);
         } else {
             pairs.add(null);
@@ -117,29 +127,34 @@ public class Ranking {
         flushSet = sets.get(3);
         
         // rank matched sets
-        if (!pairSet1.isEmpty()) {
+        if (pairSet1 != null) {
             switch (pairSet1.size())  {
+                // 4 of a kind
                 case 4:
                     rank = 8;
                     break;
+                // 3 of a kind
                 case 3:
                     rank = 4;
-                    if (!pairSet2.isEmpty()) rank = 7;
+                    // full house
+                    if (pairSet2 != null) rank = 7;
                     break;
                 case 2:
+                    // 1 pair
                     rank = 2;
-                    if (!pairSet2.isEmpty()) rank = 3;;
+                    // 2 pair
+                    if (pairSet2 != null) rank = 3;;
                     break;                    
             }
         }
         
-        // rank straits
+        // strait
         if (rank < 5 && straitSet != null) {
             rank = 5;
         }
         
-        // rank flushes
-        if (rank < 5 && flushSet != null) {
+        // flush
+        if (rank <= 5 && flushSet != null) {
             if (rank == 5) {
                 rank = 9;
             } else {
