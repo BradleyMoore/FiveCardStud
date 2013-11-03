@@ -4,23 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Hand {
-    Card cardTemp;
-    String handName;
-    List<Card> cards;
-    List<String> cardsBySuit;
-    List<Integer> cardsByValue;
-    List<Card> cardsTemp;
-    boolean skipIter;
     int player;
-    int rank;
-    int valueTemp;
-    
-    public Hand() {
-        cards = new ArrayList<>();
-        cardsTemp = new ArrayList<>();
-        cardsBySuit = new ArrayList<>();
-        cardsByValue = new ArrayList<>();
-    }
     
     public List<Card> deal(){
         List<Card> hand;
@@ -41,7 +25,7 @@ public class Hand {
         return hand;
     }
     
-    void show(){
+    void show(List<Card> cards){
         for (Card card: cards) {
             System.out.println(card.rank + " " + card.suit);
         }
