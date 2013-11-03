@@ -103,22 +103,20 @@ public class Ranking {
         return pairs;
     }
     
-    static int rankHand(List<Card> cards){ 
+    static int rankHand(List<List<Card>> sets) {
         int rank;
-        Card highCard;
-        List<Card> flushSet;
         List<Card> pairSet1;
         List<Card> pairSet2;
         List<Card> straitSet;
-        List<List<Card>> cardSet;
+        List<Card> flushSet;
         
-        highCard = getHighCard(cards);
         rank = 1;
+        pairSet1 = sets.get(0);
+        pairSet2 = sets.get(1);
+        straitSet = sets.get(2);
+        flushSet = sets.get(3);
         
         // rank matched sets
-        cardSet = checkPairs(cards);
-        pairSet1 = cardSet.get(0);
-        pairSet2 = cardSet.get(1);
         if (!pairSet1.isEmpty()) {
             switch (pairSet1.size())  {
                 case 4:
@@ -136,13 +134,11 @@ public class Ranking {
         }
         
         // rank straits
-        straitSet = checkStrait(cards);
         if (rank < 5 && straitSet != null) {
             rank = 5;
         }
         
         // rank flushes
-        flushSet = checkFlush(cards);
         if (rank < 5 && flushSet != null) {
             if (rank == 5) {
                 rank = 9;
