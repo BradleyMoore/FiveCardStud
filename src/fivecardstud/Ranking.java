@@ -4,9 +4,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class Ranking {
-    
-    public Ranking() {
-}
 
     static Card getHighCard(List<Card> cards){
         Card highCard;
@@ -106,9 +103,90 @@ public class Ranking {
         return pairs;
     }
     
-    static void evaluate(){ 
+    static int rankHand(List<Card> cards){ 
+        int rank;
+        Card highCard;
+        List<Card> flushSet;
+        List<Card> pairSet1;
+        List<Card> pairSet2;
+        List<Card> straitSet;
+        List<List<Card>> cardSet;
         
+        highCard = getHighCard(cards);
+        rank = 1;
+        
+        // rank matched sets
+        cardSet = checkPairs(cards);
+        pairSet1 = cardSet.get(0);
+        pairSet2 = cardSet.get(1);
+        if (!pairSet1.isEmpty()) {
+            switch (pairSet1.size())  {
+                case 4:
+                    rank = 8;
+                    break;
+                case 3:
+                    rank = 4;
+                    if (!pairSet2.isEmpty()) rank = 7;
+                    break;
+                case 2:
+                    rank = 2;
+                    if (!pairSet2.isEmpty()) rank = 3;;
+                    break;                    
+            }
+        }
+        
+        // rank straits
+        straitSet = checkStrait(cards);
+        if (rank < 5 && straitSet != null) {
+            rank = 5;
+        }
+        
+        // rank flushes
+        flushSet = checkFlush(cards);
+        if (rank < 5 && flushSet != null) {
+            if (rank == 5) {
+                rank = 9;
+            } else {
+                rank = 6;
+            }
+        }
+        
+    return rank;
     }
     
-
+    static String nameHand(int rank) {
+        String name;
+        
+            switch (rank) {
+                case 9:
+                    name = "Strait Flush";
+                    break;
+                case 8:
+                    name = "Four of a Kind";
+                    break;
+                case 7:
+                    name = "Full House";
+                    break;
+                case 6:
+                    name = "Flush";
+                    break;
+                case 5:
+                    name = "Strait";
+                    break;
+                case 4:
+                    name = "Three of a Kind";
+                    break;
+                case 3:
+                    name = "Two Pair";
+                    break;
+                case 2:
+                    name = "One Pair";
+                    break;
+                default:
+                    name = "High Card";
+                    break;
+            }
+        
+        return name;
+    }
 }
