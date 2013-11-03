@@ -3,9 +3,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Hierarchy {
+public class Ranking {
     
-    public Hierarchy() {
+    public Ranking() {
 }
 
     static Card getHighCard(List<Card> cards){
@@ -50,6 +50,8 @@ public class Hierarchy {
         }
         return cards;
     }
+
+    
     
     
     
