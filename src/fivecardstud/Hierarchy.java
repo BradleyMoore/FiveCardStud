@@ -16,28 +16,18 @@ public class Hierarchy {
         return highCard;
     }
  
-    List checkFlush(List<Card> cards){
-        String suitTemp;
-        suitTemp = cardsBySuit.get(0);
-        cardsTemp.add(cards.get(0));
-        skipIter = true;
-        int i = 0;
-        for (String suit: cardsBySuit) {
-            // skip first iteration
-            if (skipIter == true) {
-                skipIter = false;
-                continue;
-            }
-            i++;
-            if (suitTemp.equals(suit)) {
-                suitTemp = suit;
-                cardsTemp.add(cards.get(i));
+    boolean checkFlush(List<Card> cards){
+        Card temp;
+        temp = cards.get(0);
+        for (Card card: cards) {
+            if (!card.suit.equals(temp.suit)) {
+                return false;
             }
         }
-        return cardsTemp;
+        return true;
     }
     
-    boolean checkStrait(){
+    boolean checkStrait(List<Card> cards){
         skipIter = true;
         valueTemp = cardsByValue.get(0);
         for (int value: cardsByValue) {
@@ -59,7 +49,7 @@ public class Hierarchy {
     
     
     // rank hands from 0 being the worst and up to the best
-    public int evaluate(){
+    public int evaluate(List<Card> cards){
 
         return this.rank;
     }
