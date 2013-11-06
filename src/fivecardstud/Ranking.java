@@ -203,13 +203,22 @@ public class Ranking {
     
     static public Player getWinner() {
         List<Player> playersByRank;
+        List<Player> possibleWinners;
         Player winner;
         
+        possibleWinners = new ArrayList<>();
         playersByRank = FiveCardStud.status.players;
         Collections.sort(playersByRank, new RankComparator());
 
         winner = playersByRank.get(playersByRank.size()-1);
         
+        for (Player player: playersByRank) {
+            if (player.handRank == winner.handRank) possibleWinners.add(player);
+        }
+        
+        Collections.sort(possibleWinners, new HighCardComparator());
+        
+        winner = possibleWinners.get(possibleWinners.size()-1);
         winner.setWinner();
 
         return winner;

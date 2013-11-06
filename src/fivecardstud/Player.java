@@ -10,8 +10,16 @@ class RankComparator implements Comparator<Player> {
     }
 }
 
+class HighCardComparator implements Comparator<Player> {
+    @Override
+    public int compare(Player a, Player b) {
+        return a.highCard.value < b.highCard.value ? -1 : a.highCard.value == b.highCard.value ? 0 : 1;
+    }
+}
+
 public class Player {
     boolean winner;
+    Card highCard;
     int playerNumber;
     int handRank;
     List<List<Card>> cardSets;
@@ -37,6 +45,7 @@ public class Player {
         cards = hand.deal();
         cardSets = getSets(cards);
         rankHand();
+        highCard = Ranking.getHighCard(cards);
     }
     
     public void rankHand() {
@@ -87,6 +96,6 @@ public class Player {
     
     @Override
     public String toString() {
-        return String.format("{rank=%s}", handRank);
+        return String.format("{rank=%s, highCard=%d}", handRank, highCard);
     }
 }
