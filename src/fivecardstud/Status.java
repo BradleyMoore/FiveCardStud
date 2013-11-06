@@ -11,7 +11,7 @@ public class Status {
     
     public Status() {
         handSize = 5;
-        numPlayers = 4;
+        numPlayers = 2;
         players = new ArrayList<>();
         playersByRank = new ArrayList<>();
     }

@@ -206,7 +206,6 @@ public class Ranking {
         Card topB;
         Card top;
         
-        
         top = null;
         if (a != null) {
             topA = a.get(0);
@@ -238,6 +237,10 @@ public class Ranking {
         }
         
         Collections.sort(possibleWinners, new HighCardComparator());
+        
+        if (possibleWinners.size() > 1) {
+            Collections.sort(possibleWinners, new Pair1Comparator());
+        }
         
         winner = possibleWinners.get(possibleWinners.size()-1);
         winner.setWinner();
