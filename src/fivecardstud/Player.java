@@ -40,8 +40,8 @@ public class Player {
     }
     
     public void rankHand() {
-        handRank = rankHand(cardSets);
-        handName = nameHand(handRank);
+        handRank = hand.rankHand(cardSets);
+        handName = hand.nameHand(handRank);
     }
     
     public List<List<Card>> getSets(List<Card> cards) {
@@ -67,18 +67,6 @@ public class Player {
         sets.add(flushSet);
         
         return sets;
-    }
-    
-    public int rankHand(List<List<Card>> sets) {
-        int rank;
-        rank = Ranking.rankHand(sets);
-        return rank;
-    }
-    
-    public String nameHand(int rank) {
-        String name;
-        name = Ranking.nameHand(rank);
-        return name;
     }
     
     public void show(){

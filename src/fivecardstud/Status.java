@@ -1,6 +1,5 @@
 package fivecardstud;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Status {
@@ -8,7 +7,7 @@ public class Status {
     static int numPlayers;
     List<Player> players;
     static List<Player> playersByRank;
-    Player winner;
+    static Player winner;
     
     public Status() {
         handSize = 5;
@@ -17,13 +16,7 @@ public class Status {
         playersByRank = new ArrayList<>();
     }
     
-    public Player getWinner() {
-        playersByRank = FiveCardStud.status.players;
-        Collections.sort(playersByRank, new RankComparator());
-
-        winner = playersByRank.get(playersByRank.size()-1);
-        winner.setWinner();
-
-        return winner;
+    static public void getWinner(){
+        winner = Ranking.getWinner();
     }
 }

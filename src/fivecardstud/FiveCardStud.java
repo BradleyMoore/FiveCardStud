@@ -17,6 +17,7 @@ public class FiveCardStud {
         for (Player player: status.players) player.show();
         
         status.getWinner();
-        System.out.println("\nThe winner is " + status.winner.playerName);
+        System.out.println("");
+        System.out.println("The winner is " + status.winner.playerName);
     }
 }

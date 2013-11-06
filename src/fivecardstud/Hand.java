@@ -4,7 +4,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class Hand {
+    String name;
     int player;
+    int rank;
     
     public List<Card> deal(){
         List<Card> hand;
@@ -23,6 +25,16 @@ public class Hand {
         }
         Collections.sort(hand, new ValueComparator());
         return hand;
+    }
+    
+    public int rankHand(List<List<Card>> sets) {
+        rank = Ranking.rankHand(sets);
+        return rank;
+    }
+    
+    public String nameHand(int rank) {
+        name = Ranking.nameHand(rank);
+        return name;
     }
     
     void show(List<Card> cards){

@@ -200,4 +200,18 @@ public class Ranking {
         
         return name;
     }
+    
+    static public Player getWinner() {
+        List<Player> playersByRank;
+        Player winner;
+        
+        playersByRank = FiveCardStud.status.players;
+        Collections.sort(playersByRank, new RankComparator());
+
+        winner = playersByRank.get(playersByRank.size()-1);
+        
+        winner.setWinner();
+
+        return winner;
+    }
 }
