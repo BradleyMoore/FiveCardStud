@@ -1,8 +1,17 @@
 package fivecardstud;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
+class RankComparator implements Comparator<Player> {
+    @Override
+    public int compare(Player a, Player b) {
+        return a.handRank < b.handRank ? -1 : a.handRank == b.handRank ? 0 : 1;
+    }
+}
+
 public class Player {
+    boolean winner;
     int playerNumber;
     int handRank;
     List<List<Card>> cardSets;
@@ -12,15 +21,25 @@ public class Player {
     Hand hand;
     
     public Player(int playerNumber, String name){
+        winner = false;
         cards = new ArrayList<>();
         this.playerNumber = playerNumber;
         this.playerName = name;
         this.hand = new Hand();
+        this.handRank = 0;
+    }
+    
+    public void setWinner() {
+        winner = true;
     }
     
     public void deal(){
         cards = hand.deal();
         cardSets = getSets(cards);
+        rankHand();
+    }
+    
+    public void rankHand() {
         handRank = rankHand(cardSets);
         handName = nameHand(handRank);
     }
@@ -76,5 +95,10 @@ public class Player {
         for (int i=0; i<Status.numPlayers; i++) {
             FiveCardStud.status.players.add(new Player(i+1, "Player " + Integer.toString(i+1)));
         }
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("{rank=%s}", handRank);
     }
 }

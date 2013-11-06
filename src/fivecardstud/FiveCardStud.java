@@ -2,6 +2,7 @@ package fivecardstud;
 
 public class FiveCardStud {
     static Deck deck;    
+    static Player winner;
     static Status status;
 
     public static void main(String[] args) {
@@ -14,5 +15,8 @@ public class FiveCardStud {
         for (Player player: status.players) player.deal();
         
         for (Player player: status.players) player.show();
+        
+        status.getWinner();
+        System.out.println("\nThe winner is " + status.winner.playerName);
     }
 }
