@@ -20,6 +20,8 @@ class HighCardComparator implements Comparator<Player> {
 public class Player {
     boolean winner;
     Card highCard;
+    Card highPair1;
+    Card highPair2;
     int playerNumber;
     int handRank;
     List<List<Card>> cardSets;

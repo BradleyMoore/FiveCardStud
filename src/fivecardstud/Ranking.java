@@ -201,6 +201,27 @@ public class Ranking {
         return name;
     }
     
+    static Card getTopCard(List<Card> a, List<Card> b) {
+        Card topA;
+        Card topB;
+        Card top;
+        
+        
+        top = null;
+        if (a != null) {
+            topA = a.get(0);
+            top = topA;
+            
+            if (b != null) {
+                topB = b.get(0);
+                
+                if (topB.value > topA.value) top = topB;
+            }
+        }
+        
+        return top;
+    }
+    
     static public Player getWinner() {
         List<Player> playersByRank;
         List<Player> possibleWinners;
