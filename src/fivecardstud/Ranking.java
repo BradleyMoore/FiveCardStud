@@ -1,4 +1,5 @@
 package fivecardstud;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -264,7 +265,7 @@ public class Ranking {
         winner = players.get(players.size()-1);
         
         for (Player player: players) {
-            if (player.handRank == winner.handRank) possibleWinners.add(player);
+            if (player.hand.rank == winner.hand.rank) possibleWinners.add(player);
         }
         
         if (possibleWinners.size() > 1) {

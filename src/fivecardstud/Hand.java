@@ -1,22 +1,22 @@
 package fivecardstud;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Hand {
+    Card highCard;
     Card highPlayedCard;
     Card secondHighPlayedCard;
-    List<Card> flushSet;
-    List<Card> pairSet1;
-    List<Card> pairSet2;
-    List<Card> straitSet;
+    List<Card> cards;
     List<Card> topCards;
     String name;
     int player;
     int rank;
     
-    public List<Card> deal(){
+    public void deal(){
         List<Card> hand;
+        List<List<Card>> sets;
         hand = new ArrayList();
 
         for (Card card: FiveCardStud.deck.cards){
@@ -32,19 +32,31 @@ public class Hand {
         }
         
         Collections.sort(hand, new ValueComparator());
-        return hand;
+        cards = hand;
+        
+        sets = getSets(cards);
+        rank = rankHand(sets);
+        name = nameHand(rank);
     }
     
     public int rankHand(List<List<Card>> sets) {
         rank = Ranking.rankHand(sets);
+        getTopCards(sets);
         return rank;
     }
     
-    public void getTopCards(List<Card> sets) {
+    public void getTopCards(List<List<Card>> sets) {
+        List<Card> setA;
+        List<Card> setB;
         
-        topCards = Ranking.getTopCards(setA, SetB);
+        setA = sets.get(0);
+        setB = sets.get(1);
+        
+        topCards = Ranking.getTopCards(setA, setB);
         highPlayedCard = topCards.get(0);
         secondHighPlayedCard = topCards.get(1);
+        
+        highCard = Ranking.getHighCard(cards);
     }
     
     public String nameHand(int rank) {
@@ -53,6 +65,10 @@ public class Hand {
     }
     
     public List<List<Card>> getSets(List<Card> cards) {
+        List<Card> flushSet;
+        List<Card> pairSet1;
+        List<Card> pairSet2;
+        List<Card> straitSet;
         List<List<Card>> pairSets;
         List<List<Card>> sets;
         
@@ -69,12 +85,13 @@ public class Hand {
         if (straitSet != null) sets.add(straitSet);        
         if (pairSet1 != null) sets.add(pairSet1);        
         if (pairSet2 != null) sets.add(pairSet2);
-        
-        sets.add(pairSet1);
-        sets.add(pairSet2);
-        sets.add(straitSet);
-        sets.add(flushSet);
 
+        if (sets.size() < 4) {
+            for (int i=0; i<4; i++) {
+                sets.add(null);
+            }
+        }
+        
         return sets;
     }
     
@@ -82,5 +99,12 @@ public class Hand {
         for (Card card: cards) {
             System.out.println(card.rank + " " + card.suit);
         }
+    }
+       
+    @Override
+    public String toString() {
+        return String.format("{rank=%s, highCard=%d, highPlayedCard=%d, "
+                + "secondHighPlayedCard=%d}", 
+                rank, highCard, highPlayedCard, secondHighPlayedCard);
     }
 }

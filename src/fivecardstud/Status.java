@@ -7,7 +7,6 @@ public class Status {
     static int numPlayers;
     static int deckSize;
     List<Player> players;
-    static List<Player> playersByRank;
     static Player winner;
     
     public Status() {
@@ -15,7 +14,6 @@ public class Status {
         numPlayers = 2;
         deckSize = FiveCardStud.deck.cards.size();
         players = new ArrayList<>();
-        playersByRank = new ArrayList<>();
     }
     
     static public void getWinner(){
