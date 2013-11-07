@@ -19,6 +19,6 @@ public class Status {
     }
     
     static public void getWinner(){
-        winner = Ranking.getWinner();
+        winner = Ranking.getWinner(FiveCardStud.status.players);
     }
 }

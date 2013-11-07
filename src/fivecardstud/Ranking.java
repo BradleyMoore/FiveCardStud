@@ -76,14 +76,13 @@ public class Ranking {
             if (skipIter) {
                 skipIter = false;
                 continue;
-            }
-            
-            if (temp.value != card.value) {
+            } else if (temp.value != card.value) {
                 // if the first found pair is over
                 if (!topMatches.isEmpty()) break;
             } else {
                 topMatches.add(card);
             }
+            temp = card;
         }
         
         // find second set of matches
@@ -93,10 +92,7 @@ public class Ranking {
             if (skipIter) {
                 skipIter = false;
                 continue;
-            }
-            
-            // if cards are not already paired
-            if (!topMatches.contains(card)) {
+            } else if (!topMatches.contains(card)) {
                 if (temp.value != card.value) {
                     // if second found pair is over
                     if (!bottomMatches.isEmpty()) break;
@@ -104,10 +100,11 @@ public class Ranking {
                     bottomMatches.add(card);
                 }
             }
+            temp = card;
         }
         
-        // if bottomMatches was used switch bottomMatches and topMatches
-        if (!bottomMatches.isEmpty()) {
+        // if bottomMatches is better than topMatches
+        if (topMatches.size() <= bottomMatches.size()) {
             tempList = topMatches;
             topMatches = bottomMatches;
             bottomMatches = tempList;
@@ -137,8 +134,20 @@ public class Ranking {
         straitSet = sets.get(2);
         flushSet = sets.get(3);
         
+        /* 
+         * rank 9 = strait flush
+         * rank 8 = four of a kind
+         * rank 7 = full house
+         * rank 6 = flush
+         * rank 5 = strait
+         * rank 4 = three of a kind
+         * rank 3 = two pair
+         * rank 2 = one pair
+         * rank 1 = high card
+         */
+        
         // rank matched sets
-        if (pairSet1 != null) {
+        if (pairSet1.size() > 0) {
             switch (pairSet1.size())  {
                 // 4 of a kind
                 case 4:
@@ -154,7 +163,10 @@ public class Ranking {
                     // 1 pair
                     rank = 2;
                     // 2 pair
-                    if (pairSet2 != null) rank = 3;;
+                    if (pairSet2.size() == 2) {
+                        rank = 3;
+                    // full house
+                    } else if (pairSet2.size() == 3) rank = 7;
                     break;                    
             }
         }
@@ -166,6 +178,7 @@ public class Ranking {
         
         // flush
         if (rank <= 5 && flushSet != null) {
+            // if a flush is made then strait flush
             if (rank == 5) {
                 rank = 9;
             } else {
@@ -212,48 +225,76 @@ public class Ranking {
         return name;
     }
     
-    static Card getTopCard(List<Card> a, List<Card> b) {
+    static List<Card> getTopCards(List<Card> a, List<Card> b) {
         Card topA;
         Card topB;
         Card top;
+        List<Card> tops;
+                
+        topA = null;
+        topB = null;
+        tops = new ArrayList<>();
         
         top = null;
         if (a != null) {
-            topA = a.get(0);
+            topA = a.get(a.size()-1);
             top = topA;
             
             if (b != null) {
-                topB = b.get(0);
-                
-                if (topB.value > topA.value) top = topB;
+                topB = b.get(b.size()-1);
             }
         }
         
-        return top;
+        tops.add(topA);
+        tops.add(topB);
+        
+        return tops;
     }
     
-    static public Player getWinner() {
-        List<Player> playersByRank;
+    static public Player getWinner(List<Player> players) {
+        List<Player> shortList;
         List<Player> possibleWinners;
         Player winner;
         
         possibleWinners = new ArrayList<>();
-        playersByRank = FiveCardStud.status.players;
-        Collections.sort(playersByRank, new RankComparator());
-
-        winner = playersByRank.get(playersByRank.size()-1);
+        shortList = new ArrayList<>();
         
-        for (Player player: playersByRank) {
+        Collections.sort(players, new RankComparator());
+
+        winner = players.get(players.size()-1);
+        
+        for (Player player: players) {
             if (player.handRank == winner.handRank) possibleWinners.add(player);
         }
         
-        Collections.sort(possibleWinners, new HighCardComparator());
-        
         if (possibleWinners.size() > 1) {
-            Collections.sort(possibleWinners, new Pair1Comparator());
+            winner = possibleWinners.get(possibleWinners.size()-1);
+            shortList.add(winner);
+            for (Player player: possibleWinners) {
+                if (player.hand.highPlayedCard.value > winner.hand.highPlayedCard.value) {
+                    winner = player;
+                    shortList.add(player);
+                }
+            }
+        }
+            
+        if (shortList.size() > 1) {
+            winner = shortList.get(0);
+            possibleWinners.clear();
+            for (Player player: shortList) {
+                if (player.hand.secondHighPlayedCard.value > 
+                        winner.hand.secondHighPlayedCard.value) {
+                    winner = player;
+                    possibleWinners.add(player);
+                }
+            }
         }
         
-        winner = possibleWinners.get(possibleWinners.size()-1);
+        if (possibleWinners.size() > 1) {
+            Collections.sort(possibleWinners, new HighCardComparator());
+            winner =  possibleWinners.get(possibleWinners.size()-1);
+        }
+
         winner.setWinner();
 
         return winner;

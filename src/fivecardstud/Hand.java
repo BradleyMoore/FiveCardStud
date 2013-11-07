@@ -4,8 +4,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class Hand {
-    Card highPairCard1;
-    Card highPairCard2;
+    Card highPlayedCard;
+    Card secondHighPlayedCard;
+    List<Card> flushSet;
+    List<Card> pairSet1;
+    List<Card> pairSet2;
+    List<Card> straitSet;
+    List<Card> topCards;
     String name;
     int player;
     int rank;
@@ -35,6 +40,13 @@ public class Hand {
         return rank;
     }
     
+    public void getTopCards(List<Card> sets) {
+        
+        topCards = Ranking.getTopCards(setA, SetB);
+        highPlayedCard = topCards.get(0);
+        secondHighPlayedCard = topCards.get(1);
+    }
+    
     public String nameHand(int rank) {
         name = Ranking.nameHand(rank);
         return name;
@@ -42,10 +54,6 @@ public class Hand {
     
     public List<List<Card>> getSets(List<Card> cards) {
         List<List<Card>> pairSets;
-        List<Card> flushSet;
-        List<Card> pairSet1;
-        List<Card> pairSet2;
-        List<Card> straitSet;
         List<List<Card>> sets;
         
         sets = new ArrayList<>();
@@ -57,18 +65,16 @@ public class Hand {
         pairSet1 = pairSets.get(0);
         pairSet2 = pairSets.get(1);        
         
+        if (flushSet != null) sets.add(flushSet);
+        if (straitSet != null) sets.add(straitSet);        
+        if (pairSet1 != null) sets.add(pairSet1);        
+        if (pairSet2 != null) sets.add(pairSet2);
+        
         sets.add(pairSet1);
         sets.add(pairSet2);
         sets.add(straitSet);
         sets.add(flushSet);
-        
-        highPairCard1 = Ranking.getTopCard(pairSet1, pairSet2);
-        if (pairSet2 != null) {
-            highPairCard2 = pairSet2.get(0);
-        } else {
-            highPairCard2 = null;
-        }
-        
+
         return sets;
     }
     
