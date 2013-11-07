@@ -12,7 +12,6 @@ public class Deck {
         usedCardIndex = new ArrayList<>();
 
         createDeck();
-        deckSize = cards.size();
     }
     
     final public void createDeck() {

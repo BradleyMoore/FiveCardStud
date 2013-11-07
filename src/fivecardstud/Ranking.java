@@ -7,10 +7,10 @@ public class Ranking {
 
     static Card getHighCard(List<Card> cards){
         Card highCard;
-        highCard = cards.get(0);
-        for (Card card: cards) {
-            if (card.value > highCard.value) highCard = card;
-        }
+        
+        Collections.sort(cards, new ValueComparator());
+        highCard = cards.get(cards.size()-1);
+        
         return highCard;
     }
  
@@ -20,21 +20,21 @@ public class Ranking {
         
         for (Card card: cards) {
             if (!card.suit.equals(temp.suit)) {
-                return null;
+                cards = null;
+                break;
             }
         }
         return cards;
     }
     
-    static List<Card> checkStrait(List<Card> cards){
-        Collections.sort(cards, new ValueComparator());
-
+    static List<Card> checkStrait(List<Card> cards) {
         boolean skipIter;
         Card temp;
         
         skipIter = true;
         temp = cards.get(0);
-        
+
+        Collections.sort(cards, new ValueComparator());
         for (Card card: cards) {
             // skip first iteration
             if (skipIter == true) {
@@ -43,7 +43,8 @@ public class Ranking {
             }
 
             if (card.value - temp.value != 1) {
-                return null;
+                cards = null;
+                break;
             }
         }
         return cards;
@@ -51,64 +52,75 @@ public class Ranking {
 
     static List<List<Card>> checkPairs(List<Card> cards) {
         Collections.sort(cards, new ValueComparator());
-        boolean foundPair;
-        boolean nextList;
+        boolean onPair1;
         boolean skipIter;
-        boolean thisList;
+        boolean onPair2;
         Card temp;
-        List<Card> matches1;
-        List<Card> matches2;
+        List<Card> topMatches;
+        List<Card> bottomMatches;
+        List<Card> tempList;
         List<List<Card>> pairs;
         
-        foundPair = false;
-        nextList = false;
+        onPair1 = false;
+        onPair2 = false;
         skipIter = true;
-        thisList = false;
-        temp = cards.get(0);
-        matches1 = new ArrayList<>();
-        matches2 = new ArrayList<>();
+        bottomMatches = new ArrayList<>();
+        topMatches = new ArrayList<>();
         pairs = new ArrayList<>();
-        
-        matches1.clear();
-        matches2.clear();
-        
+
+        Collections.sort(cards, new ValueComparator());
+        // find first set of matches
+        temp = cards.get(0);
         for (Card card: cards) {
             // skip first iteration
-            if (skipIter == true) {
+            if (skipIter) {
                 skipIter = false;
                 continue;
             }
             
             if (temp.value != card.value) {
-                foundPair = false;
-            // if matches1 HAS been used keep adding pairs to matches 2
-            } else if (foundPair == false && nextList == true) {
-                if (thisList == false) matches2.add(temp);
-                matches2.add(card);
-                thisList = true;
-            // if matches2 HAS NOT been used keep adding pairs to matches1
-            } else if (matches2.isEmpty()) {
-                if (foundPair == false) matches1.add(temp);
-                matches1.add(card);
-                foundPair = true;
-                nextList = true;
+                // if the first found pair is over
+                if (!topMatches.isEmpty()) break;
+            } else {
+                topMatches.add(card);
             }
-            temp = card;
         }
         
+        // find second set of matches
+        temp = cards.get(0);
+        for (Card card: cards) {
+            // skip first iteration
+            if (skipIter) {
+                skipIter = false;
+                continue;
+            }
+            
+            // if cards are not already paired
+            if (!topMatches.contains(card)) {
+                if (temp.value != card.value) {
+                    // if second found pair is over
+                    if (!bottomMatches.isEmpty()) break;
+                } else {
+                    bottomMatches.add(card);
+                }
+            }
+        }
+        
+        // if bottomMatches was used switch bottomMatches and topMatches
+        if (!bottomMatches.isEmpty()) {
+            tempList = topMatches;
+            topMatches = bottomMatches;
+            bottomMatches = tempList;
+        }
+
         // add non-empty lists to returned list of lists
-        if (matches1.size() > 0) {
-            pairs.add(matches1);
-        } else {
-            pairs.add(null);
+        pairs.add(null);
+        pairs.add(null);
+        if (topMatches.size() > 0) {
+            pairs.set(0, topMatches);
+            if (bottomMatches.size() > 0) pairs.set(1, bottomMatches);
         }
-        
-        if (matches2.size() > 0) {
-            pairs.add(matches2);
-        } else {
-            pairs.add(null);
-        }
-        
+
         return pairs;
     }
     

@@ -18,13 +18,14 @@ public class Hand {
              // check to see if card is already dealt
             if(FiveCardStud.deck.usedCardIndex.contains(card)){
                 continue;
-            // if card is unused, use it, add to used list, iterate all
+            // if card is unused, use it add to usedCardIndex
             } else {
                 FiveCardStud.deck.usedCardIndex.add(card);
                 hand.add(card);
             }
             if (hand.size() >= Status.handSize) break;
         }
+        
         Collections.sort(hand, new ValueComparator());
         return hand;
     }
@@ -41,10 +42,10 @@ public class Hand {
     
     public List<List<Card>> getSets(List<Card> cards) {
         List<List<Card>> pairSets;
+        List<Card> flushSet;
         List<Card> pairSet1;
         List<Card> pairSet2;
         List<Card> straitSet;
-        List<Card> flushSet;
         List<List<Card>> sets;
         
         sets = new ArrayList<>();
