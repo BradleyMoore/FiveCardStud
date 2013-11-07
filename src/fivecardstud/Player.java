@@ -20,7 +20,7 @@ class HighPlayedCardComparator implements Comparator<Player> {
     }
 }
 
-class secondHighPlayedCardComparator implements Comparator<Player> {
+class SecondHighPlayedCardComparator implements Comparator<Player> {
     @Override
     public int compare(Player a, Player b) {
         return a.hand.secondHighPlayedCard.value < 

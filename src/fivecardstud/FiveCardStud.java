@@ -7,11 +7,13 @@ public class FiveCardStud {
 
     public static void main(String[] args) {
         deck = new Deck();
+        deck.createDeck();
+        status = new Status();
+
         deck.shuffle();
         
-        status = new Status();
         Player.createAll();
-
+        
         for (Player player: status.players) player.hand.deal();
         
         for (Player player: status.players) player.show();

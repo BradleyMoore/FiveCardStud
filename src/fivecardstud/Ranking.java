@@ -226,23 +226,27 @@ public class Ranking {
         return name;
     }
     
-    static List<Card> getTopCards(List<Card> a, List<Card> b) {
+    static List<Card> getTopCards(List<List<Card>> sets) {
         Card topA;
         Card topB;
         Card top;
         List<Card> tops;
-                
+        List<Card> setA;
+        List<Card> setB;
+        
+        setA = sets.get(0);
+        setB = sets.get(1);
         topA = null;
         topB = null;
         tops = new ArrayList<>();
         
         top = null;
-        if (a != null) {
-            topA = a.get(a.size()-1);
+        if (setA != null) {
+            topA = setA.get(setA.size()-1);
             top = topA;
             
-            if (b != null) {
-                topB = b.get(b.size()-1);
+            if (setB != null) {
+                topB = setB.get(setB.size()-1);
             }
         }
         
@@ -261,14 +265,13 @@ public class Ranking {
         shortList = new ArrayList<>();
         
         Collections.sort(players, new RankComparator());
-
         winner = players.get(players.size()-1);
-        
         for (Player player: players) {
             if (player.hand.rank == winner.hand.rank) possibleWinners.add(player);
         }
         
         if (possibleWinners.size() > 1) {
+            Collections.sort(possibleWinners, new HighPlayedCardComparator());
             winner = possibleWinners.get(possibleWinners.size()-1);
             shortList.add(winner);
             for (Player player: possibleWinners) {
@@ -280,6 +283,7 @@ public class Ranking {
         }
             
         if (shortList.size() > 1) {
+            Collections.sort(shortList, new SecondHighPlayedCardComparator());
             winner = shortList.get(0);
             possibleWinners.clear();
             for (Player player: shortList) {

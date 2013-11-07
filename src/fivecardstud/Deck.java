@@ -10,11 +10,9 @@ public class Deck {
     public Deck() {
         cards = new ArrayList<>();
         usedCardIndex = new ArrayList<>();
-
-        createDeck();
     }
     
-    final public void createDeck() {
+    public void createDeck() {
         final String[] values = {"2", "3", "4", "5", "6", "7", "8", "9", "10", 
             "Jack", "Queen", "King", "Ace"};
         final String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
@@ -32,8 +30,8 @@ public class Deck {
         Card temp;
         
         // swap the card at index i with a random later card
-        for (int i=0; i<deckSize; i++){
-            rand = i + (int)(Math.random() * ((deckSize-1 - i) + 1));
+        for (int i=0; i<Status.deckSize; i++){
+            rand = i + (int)(Math.random() * ((Status.deckSize-1 - i) + 1));
             temp = cards.get(i);
             cards.set(i, cards.get(rand));
             cards.set(rand, temp);

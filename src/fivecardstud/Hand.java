@@ -36,23 +36,17 @@ public class Hand {
         
         sets = getSets(cards);
         rank = rankHand(sets);
+        getTopCards(sets);
         name = nameHand(rank);
     }
     
     public int rankHand(List<List<Card>> sets) {
         rank = Ranking.rankHand(sets);
-        getTopCards(sets);
         return rank;
     }
     
     public void getTopCards(List<List<Card>> sets) {
-        List<Card> setA;
-        List<Card> setB;
-        
-        setA = sets.get(0);
-        setB = sets.get(1);
-        
-        topCards = Ranking.getTopCards(setA, setB);
+        topCards = Ranking.getTopCards(sets);
         highPlayedCard = topCards.get(0);
         secondHighPlayedCard = topCards.get(1);
         
@@ -95,16 +89,4 @@ public class Hand {
         return sets;
     }
     
-    void show(List<Card> cards){
-        for (Card card: cards) {
-            System.out.println(card.rank + " " + card.suit);
-        }
-    }
-       
-    @Override
-    public String toString() {
-        return String.format("{rank=%s, highCard=%d, highPlayedCard=%d, "
-                + "secondHighPlayedCard=%d}", 
-                rank, highCard, highPlayedCard, secondHighPlayedCard);
-    }
 }
