@@ -50,7 +50,6 @@ public class Ranking {
     }
 
     static List<List<Card>> checkPairs(List<Card> cards) {
-        Collections.sort(cards, new SuitComparator());
         Collections.sort(cards, new ValueComparator());
         boolean foundPair;
         boolean nextList;
