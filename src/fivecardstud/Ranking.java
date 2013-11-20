@@ -77,12 +77,14 @@ public class Ranking {
             if (skipIter) {
                 skipIter = false;
                 continue;
-            } else if (temp.value != card.value) {
+            } else if (temp.value == card.value) {
+                if (topMatches.isEmpty()) topMatches.add(temp);
+                topMatches.add(card);
+            } else {
                 // if the first found pair is over
                 if (!topMatches.isEmpty()) break;
-            } else {
-                topMatches.add(card);
             }
+            System.out.println(skipIter);
             temp = card;
         }
         
@@ -93,12 +95,14 @@ public class Ranking {
             if (skipIter) {
                 skipIter = false;
                 continue;
+            // check to see if this would duplicate topMatches
             } else if (!topMatches.contains(card)) {
-                if (temp.value != card.value) {
+                if (temp.value == card.value) {
+                    if (bottomMatches.isEmpty()) bottomMatches.add(temp);
+                    bottomMatches.add(card);
+                } else {
                     // if second found pair is over
                     if (!bottomMatches.isEmpty()) break;
-                } else {
-                    bottomMatches.add(card);
                 }
             }
             temp = card;
@@ -116,9 +120,11 @@ public class Ranking {
         pairs.add(null);
         if (topMatches.size() > 0) {
             pairs.set(0, topMatches);
-            if (bottomMatches.size() > 0) pairs.set(1, bottomMatches);
+            if (bottomMatches.size() > 0) {
+                pairs.set(1, bottomMatches);
+            }
         }
-
+        
         return pairs;
     }
     
@@ -134,7 +140,7 @@ public class Ranking {
         pairSet2 = sets.get(1);
         straitSet = sets.get(2);
         flushSet = sets.get(3);
-        
+
         /* 
          * rank 9 = strait flush
          * rank 8 = four of a kind
@@ -149,6 +155,8 @@ public class Ranking {
         
         // rank matched sets
         if (pairSet1.size() > 0) {
+            for (Card card: pairSet1) System.out.println(card.rank);
+            System.out.println("\n");
             switch (pairSet1.size())  {
                 // 4 of a kind
                 case 4:
@@ -163,12 +171,14 @@ public class Ranking {
                 case 2:
                     // 1 pair
                     rank = 2;
-                    // 2 pair
-                    if (pairSet2.size() == 2) {
-                        rank = 3;
-                    // full house
-                    } else if (pairSet2.size() == 3) rank = 7;
-                    break;                    
+                    if (pairSet2 != null) {
+                        // 2 pair
+                        if (pairSet2.size() == 2) {
+                            rank = 3;
+                        // full house
+                        } else if (pairSet2.size() == 3) rank = 7;
+                        break;
+                    }
             }
         }
         
