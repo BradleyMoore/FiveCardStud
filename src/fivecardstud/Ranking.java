@@ -52,80 +52,51 @@ public class Ranking {
     }
 
     static List<List<Card>> checkPairs(List<Card> cards) {
-        Collections.sort(cards, new ValueComparator());
-        boolean onPair1;
         boolean skipIter;
-        boolean onPair2;
         Card temp;
-        List<Card> topMatches;
-        List<Card> bottomMatches;
-        List<Card> tempList;
-        List<List<Card>> pairs;
+        List<Card> bottomSet;
+        List<Card> currentSet;
+        List<Card> topSet;
+        List<List<Card>> sets;
         
-        onPair1 = false;
-        onPair2 = false;
+        temp = cards.get(0);
         skipIter = true;
-        bottomMatches = new ArrayList<>();
-        topMatches = new ArrayList<>();
-        pairs = new ArrayList<>();
-
+        bottomSet = new ArrayList<>();
+        currentSet = new ArrayList<>();
+        topSet = new ArrayList<>();
+        sets = new ArrayList<>();
+        
         Collections.sort(cards, new ValueComparator());
         // find first set of matches
-        temp = cards.get(0);
         for (Card card: cards) {
             // skip first iteration
             if (skipIter) {
                 skipIter = false;
+                temp = card;
                 continue;
-            } else if (temp.value == card.value) {
-                if (topMatches.isEmpty()) topMatches.add(temp);
-                topMatches.add(card);
-            } else {
-                // if the first found pair is over
-                if (!topMatches.isEmpty()) break;
             }
-            System.out.println(skipIter);
-            temp = card;
-        }
-        
-        // find second set of matches
-        temp = cards.get(0);
-        for (Card card: cards) {
-            // skip first iteration
-            if (skipIter) {
-                skipIter = false;
-                continue;
-            // check to see if this would duplicate topMatches
-            } else if (!topMatches.contains(card)) {
-                if (temp.value == card.value) {
-                    if (bottomMatches.isEmpty()) bottomMatches.add(temp);
-                    bottomMatches.add(card);
-                } else {
-                    // if second found pair is over
-                    if (!bottomMatches.isEmpty()) break;
-                }
+            
+            if (temp.value == card.value) {
+                if (currentSet.isEmpty()) currentSet.add(temp);
+                currentSet.add(card);
+            } else if (!currentSet.isEmpty()) {
+                    if (topSet.isEmpty()) {
+                        topSet = currentSet;
+                        currentSet.clear();
+                    } else {
+                        // make sure top cards are in topSet
+                        bottomSet = topSet;
+                        topSet = currentSet;
+                        currentSet.clear();
+                        break;
+                    }
             }
             temp = card;
         }
         
-        // if bottomMatches is better than topMatches
-        if (topMatches.size() <= bottomMatches.size()) {
-            tempList = topMatches;
-            topMatches = bottomMatches;
-            bottomMatches = tempList;
-        }
-
-        // add non-empty lists to returned list of lists
-        pairs.add(null);
-        pairs.add(null);
-        if (topMatches.size() > 0) {
-            pairs.set(0, topMatches);
-            if (bottomMatches.size() > 0) {
-                pairs.set(1, bottomMatches);
-            }
-        }
-        
-        return pairs;
+        sets.add(topSet);
+        sets.add(bottomSet);
+        return sets;
     }
     
     static int rankHand(List<List<Card>> sets) {
